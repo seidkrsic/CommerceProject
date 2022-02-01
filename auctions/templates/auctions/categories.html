@@ -1,0 +1,20 @@
+{% extends 'auctions/layout.html' %}
+
+
+{% block body %}
+<div class='flex-col justify-content max-height'>
+    <h2>Categories</h2>
+    <div class='flex-col padding-lr justify-content'>
+        
+        <div class='flex-row max-height'>
+            {% for category in categories %}
+                <a href="{% url 'listCategory' category.name %}">
+                    <div class='auction-item'>
+                        <h3>{{category}}</h3>
+                    </div>
+                </a>
+                {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

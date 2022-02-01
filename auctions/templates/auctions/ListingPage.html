@@ -1,0 +1,88 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div class='flex-col centered padding-lr'>
+    <div class='flex-col centered max-width'>
+        <h1>Listing: {{item.title}}</h1>
+        <div class='auction-page'>
+            {% if item.product_photo %}
+                <img class='img' alt='product photo' src="{{item.product_photo.url}}">
+            {% else %}
+                <img class='img' src='https://png.pngtree.com/element_our/20190528/ourlarge/pngtree-shopping-cart-confirmation-item-icon-image_1144353.jpg'>
+            {% endif %}
+
+            <div class='flex-col padding-lr'>
+                {% if bid %}
+                    <h2 class='padding-lr'>Price: {{bid}}$</h2>
+                {% else %}
+                    <h2 class='padding-lr'>Price: 0.00$</h2>
+                {% endif %}
+                
+                {% if message %}
+                    <p>{{message}} than {{maxBid}}</p>
+                {% endif %}
+
+                {% if user and open %}
+                    
+                    <form action="{% url 'watchlist' item.id %}" method="POST" class='flex-row padding-top'>
+                        {% csrf_token%}
+                        <input class='back-button margine-lr' type='submit' value='Add to watchlist'>
+                        {% if creator and open %}
+                            <button class='back-button margine-lr' formaction="{% url 'close' item.id %}">Close Auction</button>
+                        {% endif %}
+                    </form>
+                    
+                {% endif %}
+
+                <div class='comment'>
+                    <p><strong>Description</strong></p> 
+                    <p>{{item.description}}</p>
+
+                </div>
+
+                {% if open %}
+                <form class='flex-col padding-lr' action="{% url 'listingPage' item.id %}" method='POST'>
+                    {% csrf_token %}
+                    {{new_bid.value.label}}
+                    {{new_bid.value}}
+                    <button class='back-button margine-tb half-width' type='submit'>Bid</button>
+                    <h4>Winning: {{winner}}</h4>
+                </form>
+                {% endif %}
+                {% if not open and user.is_authenticated %}
+                <h4 class='padding-lr'>Winner: {{winner}}</h4>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+        
+
+
+    {% if not user.is_authenticated %}
+        <p>Please <a class='red' href="{% url 'login' %}">Log in</a> or <a class='red' href="{% url 'register' %}">Register</a> to see more options.</p>
+    {% endif %}
+    <div class='flex-col centered'> 
+        <h2>Comments</h2>
+        {% for comment in comments %}
+            <div class='comment1'>
+                <p>{{comment.author}}: {{comment.content}}</p>
+            </div>
+    <hr>
+        {% endfor %}
+        {% if user.is_authenticated %}
+        <form class='flex-col centered margine-tb' action="{% url 'comments' item.id %}" method='POST'>
+            {% csrf_token %}
+            {{contentForm.content.label}}
+            <br>
+            {{contentForm.content}}
+            <br>
+            <button class='back-button' type="submit">Comment</button>
+        </form>
+        {% endif %}
+
+    </div>
+</div>
+
+
+{% endblock %}

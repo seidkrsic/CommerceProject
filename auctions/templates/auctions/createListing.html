@@ -1,0 +1,25 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div class='flex-row'>
+    {% if message %}
+        <p class='red'>{{message}}</p>
+    {% endif %}
+    <h1>Create your Auction Here</h1>
+    <form class='flex-col' action="{% url 'create' %}" method='POST' enctype='multipart/form-data'>
+        
+        {% csrf_token %}
+            <div class='flex-col form'>
+                {{form.title.label}}
+                {{form.title}}
+                {{form.description.label}}
+                {{form.description}}
+                {{form.product_photo.label}}
+                {{form.product_photo}}
+                {{form.category.label}}
+                {{form.category}}
+                <button class='back-button margine-tb custom-width' type='submit'>Save</button>
+            </div>
+    </form>
+</div>
+{% endblock %}

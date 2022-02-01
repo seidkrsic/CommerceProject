@@ -1,0 +1,38 @@
+{% extends 'auctions/layout.html' %}
+
+
+{% block body %}
+<div class='flex-col centered padding-lr'>
+    <h2>{{USER}}'s watchlist</h2>
+    {% if not auctions %}
+    <div class='flex-row max-height'>Nothing in {{USER}} watchlist yet...</div>
+    {% endif %}
+    <div class='flex-row'>
+        {% for key, value in auctions.items reversed %}
+            <a href="{% url 'listingPage' key.id %}">
+                <div class='auction-item'>
+                    {% if key.product_photo %}
+                        <img class='img-index' alt="{{key.title}}" src="{{key.product_photo.url}}">
+                    {% else %}
+                        <img class='img-index' src='https://png.pngtree.com/element_our/20190528/ourlarge/pngtree-shopping-cart-confirmation-item-icon-image_1144353.jpg'>
+                    {% endif %}
+                    <div class='flex-col'>
+                        <h3>{{key.title}}</h3>
+                        {% if value %}
+                            <p>Price: {{value}}$</p>
+                        {% else %}
+                            <p>Price: 0.00$</p>
+                        {% endif %}
+                        <p>Description: {{key.description|truncatechars:10}}</p>
+                        <p class='small-font'>Created: {{key.created_at}} </p>
+                        <form class='flex-col' action="{% url 'delete' key.id %}" method="POST">
+                            {% csrf_token %}
+                            <button class='back-button margine-tb max-width'>Remove</button>
+                        </form>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+    </div>
+</div>
+{% endblock %}

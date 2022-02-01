@@ -1,0 +1,25 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div class='flex-col padding-lr justify-content'>
+    <h2>Login</h2>
+
+    {% if message %}
+        <div>{{ message }}</div>
+    {% endif %}
+
+    <form class='flex-col centered' action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <input autofocus class="form-control margine-tb" type="text" name="username" placeholder="Username">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" name="password" placeholder="Password">
+        </div>
+        <input class="btn btn-primary margine-tb back-button" type="submit" value="Login">
+    </form>
+
+    <div class='flex-row'>Don't have an account? <a class='red padding-lr' href="{% url 'register' %}">Register here.</a></div>
+
+</div>
+{% endblock %}
